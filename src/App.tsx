@@ -1,11 +1,17 @@
-import Product from './components/Product';
+import { Route, Routes } from 'react-router-dom';
+import CartPage from './pages/CartPage';
+import MainPage from './pages/MainPage';
+import NoMatchPage from './pages/NoMatchPage';
+import ProductPage from './pages/ProductPage';
 
 function App() {
   return (
-    <>
-      <h1>HELLO!!!</h1>
-      <Product />
-    </>
+    <Routes>
+      <Route path={'/'} element={<MainPage />} />
+      <Route path={'/product'} element={<ProductPage />} />
+      <Route path={'/cart'} element={<CartPage />} />
+      <Route path={'*'} element={<NoMatchPage />} />
+    </Routes>
   );
 }
 
