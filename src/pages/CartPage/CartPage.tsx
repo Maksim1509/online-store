@@ -52,34 +52,44 @@ const CartPage = () => {
           return acc + sum;
         }, 0)}
       </b>
+
       <ul className='cart__list'>
+        <li className='cart__item'>
+          <span>Product</span>
+          <span>Count</span>
+          <span>SUM</span>
+        </li>
         {products.map((product) => (
           <li className='cart__item' key={product.id}>
-            <Product {...product} />
-            <button
-              className='cart__btn'
-              onClick={incrementHendler(product.id)}
-            >
-              {product.id === idWithError && (
-                <span className='cart__error-message'>
-                  The maximum count of goods {product.stock}pcs
-                </span>
-              )}
-              +
-            </button>
-            <span className='cart__count'>{countState[product.id]}</span>
-            <button
-              className='cart__btn'
-              onClick={decrementHendler(product.id)}
-            >
-              -
-            </button>
-            <button
-              className='cart__btn'
-              onClick={removeProductHandler(product.id)}
-            >
-              Remove
-            </button>
+            <div>
+              <Product {...product} />
+            </div>
+            <div className='cart__counter'>
+              <button
+                className='cart__btn'
+                onClick={incrementHendler(product.id)}
+              >
+                {product.id === idWithError && (
+                  <span className='cart__error-message'>
+                    The maximum count of goods {product.stock}pcs
+                  </span>
+                )}
+                +
+              </button>
+              <span className='cart__count'>{countState[product.id]}</span>
+              <button
+                className='cart__btn'
+                onClick={decrementHendler(product.id)}
+              >
+                -
+              </button>
+              <button
+                className='cart__btn'
+                onClick={removeProductHandler(product.id)}
+              >
+                Remove
+              </button>
+            </div>
             <span>SUM: {product.price * countState[product.id]}</span>
           </li>
         ))}
