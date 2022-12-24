@@ -1,0 +1,35 @@
+.cart__list {
+  width: 100%;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  gap: 40px;
+}
+
+.cart__item {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border-bottom: 1px solid #0078d7;
+}
+
+.cart__btn {
+  position: relative;
+  height: 30px;
+  min-width: 40px;
+  background-color: #0078d7;
+  border: none;
+  border-radius: 2px;
+  color: #ffffff;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.cart__error-message {
+  color: #f80404;
+  position: absolute;
+  left: 380px;
+  top: 300px;
+}
