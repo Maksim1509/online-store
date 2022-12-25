@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import Pagination from '../../components/Pagination/Pagination';
 import Product from '../../components/Product/Product';
 import { Context } from '../../context/Context';
 import './cart.css';
@@ -6,26 +7,39 @@ import './cart.css';
 const CartPage = () => {
   const { cart } = useContext(Context);
   const [products, setProducts] = useState(cart);
+  const [productsPerPage, setProductsPerPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
   const [idWithError, setIdWithError] = useState<null | number>(null);
+  const [pageCount, setPageCount] = useState(
+    Math.ceil(products.length / productsPerPage)
+  );
 
   const countStateInit = Object.fromEntries(
     products.map((item) => [item.id, 1])
   );
   const [countState, setCount] = useState(countStateInit);
 
+  if (currentPage > pageCount) setCurrentPage(pageCount);
+
   const removeProductHandler = (removeId: number) => () => {
     const newProductsState = products.filter(({ id }) => id !== removeId);
     setProducts(newProductsState);
     setCount({ ...countState, [removeId]: 0 });
     localStorage.cartData = JSON.stringify(newProductsState);
+    const newPageCount =
+      Math.ceil(newProductsState.length / productsPerPage) || 1;
+    setPageCount(newPageCount);
   };
-
   const decrementHendler = (currentId: number) => () => {
     setIdWithError(null);
     const newCount = countState[currentId] - 1;
     if (newCount < 1) {
-      setProducts(products.filter(({ id }) => id !== currentId));
+      const newProductsState = products.filter(({ id }) => id !== currentId);
+      setProducts(newProductsState);
       setCount({ ...countState, [currentId]: 0 });
+      const newPageCount =
+        Math.ceil(newProductsState.length / productsPerPage) || 1;
+      setPageCount(newPageCount);
     }
     const newCountState = { ...countState, [currentId]: newCount };
     setCount(newCountState);
@@ -40,10 +54,12 @@ const CartPage = () => {
     }
     setCount({ ...countState, [id]: newCount });
   };
-  console.log(products);
-  console.log(countState);
+
+  const lastProductIndex = currentPage * productsPerPage;
+  const firstProductIndex = lastProductIndex - productsPerPage;
+  const currentProducts = products.slice(firstProductIndex, lastProductIndex);
   return (
-    <>
+    <section className='cart'>
       <h1>Cart</h1>
       <b>
         TOTAL:{' '}
@@ -52,6 +68,16 @@ const CartPage = () => {
           return acc + sum;
         }, 0)}
       </b>
+      <div className='cart__pagination'>
+        <Pagination
+          itemCount={products.length}
+          itemsPerPage={productsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          setItemsPerPage={setProductsPerPage}
+          setPageCount={setPageCount}
+        />
+      </div>
 
       <ul className='cart__list'>
         <li className='cart__item'>
@@ -59,7 +85,7 @@ const CartPage = () => {
           <span>Count</span>
           <span>SUM</span>
         </li>
-        {products.map((product) => (
+        {currentProducts.map((product) => (
           <li className='cart__item' key={product.id}>
             <div>
               <Product {...product} />
@@ -94,7 +120,7 @@ const CartPage = () => {
           </li>
         ))}
       </ul>
-    </>
+    </section>
   );
 };
 

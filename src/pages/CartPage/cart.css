@@ -1,3 +1,7 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+}
 .cart__list {
   width: 100%;
   padding: 0 40px;
@@ -38,4 +42,9 @@
   position: absolute;
   left: 380px;
   top: 300px;
+}
+
+.cart__pagination {
+  margin: auto;
+  width: 200px;
 }
