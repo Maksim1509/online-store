@@ -1,4 +1,7 @@
 import { ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+
 import './pagination.css';
 
 interface IProp {
@@ -11,6 +14,8 @@ interface IProp {
 }
 
 const Pagination = (prop: IProp) => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const {
     itemCount,
     itemsPerPage,
@@ -19,23 +24,40 @@ const Pagination = (prop: IProp) => {
     setItemsPerPage,
     setPageCount,
   } = prop;
-
   const changeHandler = (e: ChangeEvent) => {
     const input = e.target as HTMLInputElement;
     const value = Number(input.value);
     const newPagesCount = Math.ceil(itemCount / value);
     setPageCount(newPagesCount);
     setItemsPerPage(value);
+    localStorage.setItem('productsPerPage', String(value));
+    const pageParam = searchParams.get('page');
+    const queryString = pageParam
+      ? `?page=${pageParam}&productsPerPage=${value}`
+      : `?productsPerPage=${value}`;
+    navigate(queryString);
   };
 
   const prevHandler = () => {
     if (currentPage - 1 === 0) return;
+    localStorage.setItem('currentPage', String(currentPage - 1));
+    const productsPerPage = searchParams.get('productsPerPage');
+    const queryString = productsPerPage
+      ? `?page=${currentPage - 1}&productsPerPage=${productsPerPage}`
+      : `?page=${currentPage - 1}`;
+    navigate(queryString);
     setCurrentPage(currentPage - 1);
   };
 
   const nextHandler = () => {
-    if (currentPage > Math.ceil(itemCount / itemsPerPage)) return;
+    if (currentPage === Math.ceil(itemCount / itemsPerPage)) return;
+    localStorage.setItem('currentPage', String(currentPage + 1));
+    const productsPerPage = searchParams.get('productsPerPage');
+    const queryString = productsPerPage
+      ? `?page=${currentPage + 1}&productsPerPage=${productsPerPage}`
+      : `?page=${currentPage + 1}`;
     setCurrentPage(currentPage + 1);
+    navigate(queryString);
   };
   return (
     <div className='pagination'>

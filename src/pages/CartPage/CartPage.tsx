@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from '../../components/Pagination/Pagination';
 import Product from '../../components/Product/Product';
 import { Context } from '../../context/Context';
@@ -6,9 +7,27 @@ import './cart.css';
 
 const CartPage = () => {
   const { cart } = useContext(Context);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const currentPageStorage = localStorage.currentPage
+    ? JSON.parse(localStorage.currentPage)
+    : 1;
+  const productsPerPageStorage = localStorage.productsPerPage
+    ? JSON.parse(localStorage.productsPerPage)
+    : 3;
+
+  const limitParams = searchParams.get('productsPerPage');
+  const limitInit = limitParams
+    ? Number(searchParams.get('productsPerPage'))
+    : productsPerPageStorage;
+
+  const pageParams = searchParams.get('page');
+  const pageInit = pageParams ? Number(pageParams) : currentPageStorage;
+
   const [products, setProducts] = useState(cart);
-  const [productsPerPage, setProductsPerPage] = useState(3);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage, setProductsPerPage] = useState(limitInit);
+  const [currentPage, setCurrentPage] = useState(pageInit);
   const [idWithError, setIdWithError] = useState<null | number>(null);
   const [pageCount, setPageCount] = useState(
     Math.ceil(products.length / productsPerPage)
@@ -19,7 +38,16 @@ const CartPage = () => {
   );
   const [countState, setCount] = useState(countStateInit);
 
-  if (currentPage > pageCount) setCurrentPage(pageCount);
+  useEffect(() => {
+    if (currentPage > pageCount) {
+      const productsPerPage = searchParams.get('productsPerPage');
+      const queryString = productsPerPage
+        ? `?page=${pageCount}&productsPerPage=${productsPerPage}`
+        : `?page=${pageCount}`;
+      navigate(queryString);
+      setCurrentPage(pageCount);
+    }
+  }, [currentPage, pageCount, navigate, searchParams]);
 
   const removeProductHandler = (removeId: number) => () => {
     const newProductsState = products.filter(({ id }) => id !== removeId);
