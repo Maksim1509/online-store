@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from '../../components/Pagination/Pagination';
 import Product from '../../components/Product/Product';
+import Summary from '../../components/Summary/Summary';
 import { Context } from '../../context/Context';
 import './cart.css';
 
@@ -37,7 +38,7 @@ const CartPage = () => {
     products.map((item) => [item.id, 1])
   );
   const [countState, setCount] = useState(countStateInit);
-
+  console.log(countState);
   useEffect(() => {
     if (currentPage > pageCount) {
       const productsPerPage = searchParams.get('productsPerPage');
@@ -148,6 +149,15 @@ const CartPage = () => {
           </li>
         ))}
       </ul>
+      <section className='cart__summary'>
+        <Summary
+          count={Object.values(countState).reduce((acc, val) => acc + val, 0)}
+          total={products.reduce((acc, item) => {
+            const sum = item.price * countState[item.id];
+            return acc + sum;
+          }, 0)}
+        />
+      </section>
     </section>
   );
 };

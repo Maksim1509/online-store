@@ -48,3 +48,9 @@
   margin: auto;
   width: 200px;
 }
+
+.cart__summary {
+  width: 300px;
+  height: 140px;
+  margin-top: 20px;
+}
