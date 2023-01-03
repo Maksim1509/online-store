@@ -10,7 +10,7 @@ function App() {
   return (
     <Routes>
       <Route path={'/'} element={<MainPage />} />
-      <Route path={'/product'} element={<ProductPage />} />
+      <Route path={'/product/:idi'} element={<ProductPage />} />
       <Route path={'/cart'} element={<CartPage />} />
       <Route path={'*'} element={<NoMatchPage />} />
     </Routes>
