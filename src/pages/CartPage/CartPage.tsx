@@ -38,7 +38,6 @@ const CartPage = () => {
     products.map((item) => [item.id, 1])
   );
   const [countState, setCount] = useState(countStateInit);
-  console.log(countState);
   useEffect(() => {
     if (currentPage > pageCount) {
       const productsPerPage = searchParams.get('productsPerPage');

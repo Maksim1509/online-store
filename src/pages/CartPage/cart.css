@@ -5,7 +5,9 @@
 .cart__list {
   width: 100%;
   padding: 0 40px;
-
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
   list-style: none;
   margin: 0;
   margin-top: 40px;
@@ -17,6 +19,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #0078d7;
+  padding-bottom: 10px;
 }
 
 .cart__counter {
@@ -51,6 +54,5 @@
 
 .cart__summary {
   width: 300px;
-  height: 140px;
   margin-top: 20px;
 }

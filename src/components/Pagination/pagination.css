@@ -21,6 +21,12 @@
   font-weight: bold;
   background-color: transparent;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.pagination__prev:hover,
+.pagination__next:hover {
+  transform: scale(110%);
 }
 
 .pagination__current-page {
