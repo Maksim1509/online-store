@@ -6,10 +6,12 @@ import { IProduct } from '../types';
 
 const ProductPage = () => {
   const params = useParams();
+  const productId = Number(params.id);
+  console.log('data', data);
   const renderProduct = (data: IProduct[]) =>
-    data.map((item) => <Product key={item.id} {...item} />);
-
-  console.log('111', renderProduct);
+    data
+      .filter((item) => item.id === productId)
+      .map((item) => <Product key={item.id} {...item} />);
 
   return (
     <div>
