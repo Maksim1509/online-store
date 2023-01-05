@@ -43,7 +43,9 @@ const Summary = (props: ISummaryProps) => {
     const code = findCode(inputCodeValue);
     if (code) {
       const { value } = code;
-      setTotalDiscont(value + totalDiscont);
+      if (!applyCodes[code.id]) {
+        setTotalDiscont(value + totalDiscont);
+      }
       setApplyCodes({ ...applyCodes, [code.id]: code });
       setInputCodeValue('');
     } else {
@@ -62,8 +64,7 @@ const Summary = (props: ISummaryProps) => {
       <ul>
         {Object.values(applyCodes).map(({ code, value, id }) => (
           <li key={id}>
-            {code}: -{value}
-            <button onClick={dropCodeHandler(id)}>Drop</button>
+            {code}: -{value}%<button onClick={dropCodeHandler(id)}>Drop</button>
           </li>
         ))}
       </ul>
