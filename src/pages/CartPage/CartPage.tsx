@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Pagination from '../../components/Pagination/Pagination';
+import Pagination from './Pagination/Pagination';
 import Product from '../../components/Product/Product';
-import Summary from '../../components/Summary/Summary';
+import Summary from './Summary/Summary';
 import { Context } from '../../context/Context';
 import './cart.css';
 
