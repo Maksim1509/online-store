@@ -1,10 +1,13 @@
 import { useContext } from 'react';
 import { Context } from '../../context/Context';
 import { IProduct } from '../../types';
-import './product.css';
+import './productWithImgs.css';
+import React, { useState } from 'react';
 
 const ProductWithImgs = (data: IProduct) => {
   const { cart, add } = useContext(Context);
+  const [selectedImage, setSelectedImage] = useState(data.images[0]);
+
   const addToCardHendler = (data: IProduct) => () => {
     const isAdded = cart.filter(({ id }) => id === data.id).length;
     if (isAdded) {
@@ -15,16 +18,31 @@ const ProductWithImgs = (data: IProduct) => {
     console.log(cart);
   };
 
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image);
+  };
+
   return (
-    <section className='product'>
+    <section className='productPage'>
       <h3>Category: {data.category}</h3>
       <h3>{data.title}</h3>
       <span>Price: {data.price}</span>
       <p>{data.description}</p>
       <span>Stok: {data.stock}</span>
-      {data.images.map((image) => (
-        <img key={image} src={image} alt={data.title} />
-      ))}
+      <div className='selected-image'>
+        <img src={selectedImage} alt={data.title} />
+      </div>
+      <div className='slider-container'>
+        {data.images.map((image) => (
+          <img
+            key={data.id}
+            src={image}
+            alt={data.title}
+            onClick={() => handleImageClick(image)}
+            className={image === selectedImage ? 'selected' : ''}
+          />
+        ))}
+      </div>
       <button onClick={addToCardHendler(data)}>Add to cart</button>
     </section>
   );
