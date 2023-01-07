@@ -4,6 +4,7 @@ import './summary.css';
 interface ISummaryProps {
   count: number;
   total: number;
+  modalShow: () => void;
 }
 
 interface Code {
@@ -23,7 +24,7 @@ type ApllyCodesState = {
 const invalidCodeMessage = 'This is the wrong promo code';
 
 const Summary = (props: ISummaryProps) => {
-  const { count, total } = props;
+  const { count, total, modalShow } = props;
   const [inputCodeValue, setInputCodeValue] = useState('');
   const [applyCodes, setApplyCodes] = useState<ApllyCodesState>({});
   const [invalidCode, setInvalidCode] = useState('');
@@ -61,7 +62,7 @@ const Summary = (props: ISummaryProps) => {
 
   const renderAddedCodes = () => {
     return (
-      <ul>
+      <ul className='summary__promo-list'>
         {Object.values(applyCodes).map(({ code, value, id }) => (
           <li key={id}>
             {code}: -{value}%<button onClick={dropCodeHandler(id)}>Drop</button>
@@ -99,20 +100,14 @@ const Summary = (props: ISummaryProps) => {
         )}
       </div>
 
-      <button className='promo__btn' onClick={apllyCodeHandler}>
-        apply propmo code
+      <button className='summary__btn' onClick={apllyCodeHandler}>
+        Apply promo code
       </button>
       <span className='summary__test-codes'>Test Codes: rs, epm</span>
       {renderAddedCodes()}
-      <button
-        className='summary__btn'
-        onClick={() => {
-          console.log('TODO');
-        }}
-      >
+      <button className='summary__btn' onClick={modalShow}>
         Buy Now
       </button>
-      <span className='summary__test-codes'>Test Codes: rs, epm</span>
     </section>
   );
 };

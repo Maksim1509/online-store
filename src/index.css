@@ -3,6 +3,17 @@
   font-family: sans-serif;
 }
 
+body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+#root {
+  max-width: 1620px;
+  margin: 0 auto;
+}
+
 .main__products {
   display: flex;
   flex-wrap: wrap;

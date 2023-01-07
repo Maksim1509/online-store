@@ -5,8 +5,13 @@ import Product from '../../components/Product/Product';
 import Summary from './Summary/Summary';
 import { Context } from '../../context/Context';
 import './cart.css';
+import Modal from '../../components/Modal/Modal';
 
 const CartPage = () => {
+  const [modal, setModal] = useState(false);
+
+  const modalShow = () => setModal(true);
+  const modalClose = () => setModal(false);
   const { cart } = useContext(Context);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -155,8 +160,10 @@ const CartPage = () => {
             const sum = item.price * countState[item.id];
             return acc + sum;
           }, 0)}
+          modalShow={modalShow}
         />
       </section>
+      {modal && <Modal modalClose={modalClose} />}
     </section>
   );
 };
