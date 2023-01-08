@@ -2,3 +2,8 @@
   width: 32px;
   height: 32px;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
