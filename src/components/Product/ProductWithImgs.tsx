@@ -23,7 +23,7 @@ const ProductWithImgs = (data: IProduct) => {
 
   return (
     <section className='productPage'>
-      <h3>Category: {data.category}</h3>
+      <h3>{`STORE  >>  ${data.category}  >>  ${data.brand}  >>  ${data.title}`}</h3>
       <h3>{data.title}</h3>
       <span>Price: {data.price}</span>
       <p>{data.description}</p>
@@ -32,9 +32,9 @@ const ProductWithImgs = (data: IProduct) => {
         <img src={selectedImage} alt={data.title} />
       </div>
       <div className='slider-container'>
-        {data.images.map((image) => (
+        {data.images.map((image, index) => (
           <img
-            key={data.id}
+            key={index}
             src={image}
             alt={data.title}
             onClick={() => handleImageClick(image)}
