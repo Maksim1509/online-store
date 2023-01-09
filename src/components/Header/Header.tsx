@@ -16,8 +16,8 @@ const Header = () => {
       <span>Cart total:</span>
       <>
         <Link to={'/cart'}>
-          <img src={cartImg} alt='cartImg' className='header_imgs' />
           <span>count</span>
+          <img src={cartImg} alt='cartImg' className='header_imgs' />
         </Link>
       </>
     </div>

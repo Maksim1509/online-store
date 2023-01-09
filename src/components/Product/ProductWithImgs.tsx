@@ -32,9 +32,9 @@ const ProductWithImgs = (data: IProduct) => {
         <img src={selectedImage} alt={data.title} />
       </div>
       <div className='slider-container'>
-        {data.images.map((image) => (
+        {data.images.map((image, index) => (
           <img
-            key={data.id}
+            key={index}
             src={image}
             alt={data.title}
             onClick={() => handleImageClick(image)}
