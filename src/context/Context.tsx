@@ -3,7 +3,7 @@ import { IProduct } from '../types';
 
 export interface IContext {
   cart: IProduct[];
-  add: (data: IProduct) => void;
+  updateCart: (data: IProduct[]) => void;
 }
 
 const localContext: IProduct[] = localStorage.cartData
@@ -12,7 +12,7 @@ const localContext: IProduct[] = localStorage.cartData
 
 const context: IContext = {
   cart: localContext,
-  add: (data: IProduct) => {
+  updateCart: (data: IProduct[]) => {
     console.log(data);
   },
 };
@@ -20,13 +20,15 @@ const context: IContext = {
 export const Context = createContext<IContext>(context);
 
 const ContextState = ({ children }: { children: React.ReactNode }) => {
-  const [cart, addToCart] = useState(context.cart);
-  const add = (data: IProduct) => {
-    localStorage.cartData = JSON.stringify([...cart, data]);
-    addToCart([...cart, data]);
+  const [cart, setCart] = useState(context.cart);
+  const updateCart = (data: IProduct[]) => {
+    localStorage.cartData = JSON.stringify(data);
+    setCart(data);
   };
 
-  return <Context.Provider value={{ cart, add }}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ cart, updateCart }}>{children}</Context.Provider>
+  );
 };
 
 export default ContextState;

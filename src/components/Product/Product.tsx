@@ -4,15 +4,14 @@ import { IProduct } from '../../types';
 import './product.css';
 
 const Product = (data: IProduct) => {
-  const { cart, add } = useContext(Context);
+  const { cart, updateCart } = useContext(Context);
   const addToCardHendler = (data: IProduct) => () => {
     const isAdded = cart.filter(({ id }) => id === data.id).length;
     if (isAdded) {
       console.log('Product already added to the Cart');
       return;
     }
-    add(data);
-    console.log(cart);
+    updateCart([...cart, data]);
   };
 
   return (
