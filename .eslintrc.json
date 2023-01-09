@@ -27,7 +27,12 @@
   /* Правила для отслеживания линтером. Если пресеты покрывают не все ситуации, 
   вы можете прописать нужные правила вручную. */
   "rules": {
-    "prettier/prettier": "error", // Обязательно!! Подсвечивает ошибки из Prettier.
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ], // Обязательно!! Подсвечивает ошибки из Prettier.
     "react/prop-types": 0, // Отключаем правило проверки передаваемых типов.
     "no-console": 0,
     "@typescript-eslint/no-explicit-any": 2
