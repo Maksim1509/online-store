@@ -82,10 +82,10 @@ const Summary = (props: ISummaryProps) => {
             : 'summary__total'
         }
       >
-        Total: {total}
+        Total: ${total}
       </span>
       {!!totalDiscont && (
-        <span>Total: {Math.round((total / 100) * (100 - totalDiscont))}</span>
+        <span>Total: ${Math.round((total / 100) * (100 - totalDiscont))}</span>
       )}
       <div className='summary__promo-wrap'>
         <input

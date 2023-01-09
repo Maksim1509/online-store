@@ -4,7 +4,7 @@
 }
 
 .header {
-  padding-top: 40px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   max-width: 1620px;
@@ -12,4 +12,25 @@
   background-color: #0078d7;
   color: #ffffff;
   font-size: 20px;
+}
+
+.header__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 190px;
+  text-decoration: none;
+  color: #000000;
+}
+
+.header__link-cart {
+  position: relative;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+}
+
+.header__count {
+  position: absolute;
+  top: -8px;
+  right: 10px;
 }

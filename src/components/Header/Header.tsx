@@ -12,13 +12,13 @@ const Header = () => {
 
   return (
     <div className='header'>
-      <Link to={'/'}>
+      <Link to={'/'} className='header__link'>
         <img src={shopImg} alt='shopImg' className='header_imgs' />
         <span>ONLINE STORE</span>
       </Link>
-      <span>Cart total:${total}</span>
-      <Link to={'/cart'}>
-        <span>{count}</span>
+      <span>Cart total: ${total}</span>
+      <Link to={'/cart'} className='header__link-cart'>
+        <span className='header__count'>{count}</span>
         <img src={cartImg} alt='cartImg' className='header_imgs' />
       </Link>
     </div>

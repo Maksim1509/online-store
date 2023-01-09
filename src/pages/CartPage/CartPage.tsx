@@ -128,13 +128,6 @@ const CartPage = () => {
   return (
     <section className='cart'>
       <h1>Cart</h1>
-      <b>
-        TOTAL:{' '}
-        {products.reduce((acc, item) => {
-          const sum = item.price * countState[item.id];
-          return acc + sum;
-        }, 0)}
-      </b>
       <div className='cart__pagination'>
         <Pagination
           itemCount={products.length}
@@ -150,7 +143,7 @@ const CartPage = () => {
         <li className='cart__item'>
           <span>Product</span>
           <span>Count</span>
-          <span>SUM</span>
+          <span>SUM$</span>
         </li>
         {currentProducts.map((product) => (
           <li className='cart__item' key={product.id}>
@@ -183,7 +176,7 @@ const CartPage = () => {
                 Remove
               </button>
             </div>
-            <span>SUM: {product.price * countState[product.id]}</span>
+            <span>SUM: ${product.price * countState[product.id]}</span>
           </li>
         ))}
       </ul>

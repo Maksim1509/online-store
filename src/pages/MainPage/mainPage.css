@@ -1,0 +1,10 @@
+.main__products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.main__title {
+  width: 100%;
+}
