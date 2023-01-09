@@ -51,7 +51,7 @@ const CartPage = () => {
   const [pageCount, setPageCount] = useState(
     Math.ceil(products.length / productsPerPage)
   );
-  console.log(products);
+
   const countStateInit = Object.fromEntries(
     products.map((item) => [item.id, 1])
   );

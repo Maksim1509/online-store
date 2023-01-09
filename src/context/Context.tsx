@@ -22,12 +22,12 @@ const localContextCartSummary: CartSummary = localStorage.cartSummary
 
 const context: IContext = {
   cart: localContext,
-  updateCart: (data: IProduct[]) => {
-    console.log(data);
+  updateCart: () => {
+    return;
   },
   cartSummary: localContextCartSummary,
-  updateCartSummary: (cartSummary: CartSummary) => {
-    console.log(cartSummary);
+  updateCartSummary: () => {
+    return;
   },
 };
 

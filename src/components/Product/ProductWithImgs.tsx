@@ -2,10 +2,11 @@ import { useContext } from 'react';
 import { Context } from '../../context/Context';
 import { IProduct } from '../../types';
 import './productWithImgs.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const ProductWithImgs = (data: IProduct) => {
-  const { cart, updateCart } = useContext(Context);
+  const { cart, updateCart, cartSummary, updateCartSummary } =
+    useContext(Context);
   const [selectedImage, setSelectedImage] = useState(data.images[0]);
 
   const addToCardHendler = (data: IProduct) => () => {
@@ -14,6 +15,10 @@ const ProductWithImgs = (data: IProduct) => {
       console.log('Product already added to the Cart');
       return;
     }
+    updateCartSummary({
+      total: cartSummary.total + data.price,
+      count: cartSummary.count + 1,
+    });
     updateCart([...cart, data]);
   };
 
@@ -42,7 +47,9 @@ const ProductWithImgs = (data: IProduct) => {
           />
         ))}
       </div>
-      <button onClick={addToCardHendler(data)}>Add to cart</button>
+      <button className='addBtn' onClick={addToCardHendler(data)}>
+        Add to cart
+      </button>
     </section>
   );
 };

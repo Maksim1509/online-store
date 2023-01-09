@@ -9,7 +9,7 @@ const Header = () => {
   const {
     cartSummary: { total, count },
   } = useContext(Context);
-  console.log(useContext(Context));
+
   return (
     <div className='header'>
       <Link to={'/'}>
