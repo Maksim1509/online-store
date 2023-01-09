@@ -18,7 +18,7 @@ const Product = (data: IProduct) => {
     };
 
   return (
-    <Link to={`/product/${data.id}`}>
+    <Link to={`/product/${data.id}`} target='_blank'>
       <section className='product'>
         <h3>Category: {data.category}</h3>
         <h3>{data.title}</h3>
