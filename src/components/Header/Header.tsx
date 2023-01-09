@@ -10,7 +10,7 @@ const Header = () => {
       <>
         <Link to={'/'}>
           <img src={shopImg} alt='shopImg' className='header_imgs' />
-          <span>ONLINE SHOP</span>
+          <span>ONLINE STORE</span>
         </Link>
       </>
       <span>Cart total:</span>

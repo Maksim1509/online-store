@@ -12,3 +12,7 @@
   height: 150px;
   object-fit: contain;
 }
+
+.addBtn {
+  z-index: 5;
+}
