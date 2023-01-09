@@ -15,4 +15,5 @@
 
 .addBtn {
   z-index: 5;
+  cursor: pointer;
 }
