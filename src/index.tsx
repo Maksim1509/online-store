@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import ContextState from './context/Context';
 import Header from './components/Header/Header';
 
@@ -11,11 +11,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <ContextState>
         <Header />
         <App />
       </ContextState>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );

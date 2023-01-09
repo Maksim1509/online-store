@@ -1,7 +1,6 @@
 {
   "name": "online-store",
   "version": "0.1.0",
-  "private": true,
   "homepage": "https://maksim1509.github.io/online-store/",
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
