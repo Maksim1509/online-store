@@ -13,7 +13,7 @@ const ProductPage = () => {
       .map((item) => <ProductWithImgs key={item.id} {...item} />);
   return (
     <div>
-      <section className='product'>{renderProduct(data.products)}</section>
+      <section className='productPage'>{renderProduct(data.products)}</section>
     </div>
   );
 };

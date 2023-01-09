@@ -5,7 +5,7 @@ import './productWithImgs.css';
 import React, { useState } from 'react';
 
 const ProductWithImgs = (data: IProduct) => {
-  const { cart, add } = useContext(Context);
+  const { cart, updateCart } = useContext(Context);
   const [selectedImage, setSelectedImage] = useState(data.images[0]);
 
   const addToCardHendler = (data: IProduct) => () => {
@@ -14,8 +14,7 @@ const ProductWithImgs = (data: IProduct) => {
       console.log('Product already added to the Cart');
       return;
     }
-    add(data);
-    console.log(cart);
+    updateCart([...cart, data]);
   };
 
   const handleImageClick = (image: string) => {
