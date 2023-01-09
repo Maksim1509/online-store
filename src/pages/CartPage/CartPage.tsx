@@ -6,13 +6,27 @@ import Summary from './Summary/Summary';
 import { Context } from '../../context/Context';
 import './cart.css';
 import Modal from '../../components/Modal/Modal';
+import { IProduct } from '../../types';
+
+type CountState = {
+  [key: string]: number;
+};
+
+const getCount = (state: CountState): number =>
+  Object.values(state).reduce((acc, val) => acc + val, 0);
+
+const getTotal = (state: IProduct[], countState: CountState): number =>
+  state.reduce((acc, item) => {
+    const sum = item.price * countState[item.id];
+    return acc + sum;
+  }, 0);
 
 const CartPage = () => {
   const [modal, setModal] = useState(false);
 
   const modalShow = () => setModal(true);
   const modalClose = () => setModal(false);
-  const { cart } = useContext(Context);
+  const { cart: products, updateCart, updateCartSummary } = useContext(Context);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -31,18 +45,17 @@ const CartPage = () => {
   const pageParams = searchParams.get('page');
   const pageInit = pageParams ? Number(pageParams) : currentPageStorage;
 
-  const [products, setProducts] = useState(cart);
   const [productsPerPage, setProductsPerPage] = useState(limitInit);
   const [currentPage, setCurrentPage] = useState(pageInit);
   const [idWithError, setIdWithError] = useState<null | number>(null);
   const [pageCount, setPageCount] = useState(
     Math.ceil(products.length / productsPerPage)
   );
-
+  console.log(products);
   const countStateInit = Object.fromEntries(
     products.map((item) => [item.id, 1])
   );
-  const [countState, setCount] = useState(countStateInit);
+  const [countState, setCount] = useState<CountState>(countStateInit);
   useEffect(() => {
     if (currentPage > pageCount) {
       const productsPerPage = searchParams.get('productsPerPage');
@@ -56,7 +69,12 @@ const CartPage = () => {
 
   const removeProductHandler = (removeId: number) => () => {
     const newProductsState = products.filter(({ id }) => id !== removeId);
-    setProducts(newProductsState);
+    updateCart(newProductsState);
+    const newCountState: CountState = { ...countState, [removeId]: 0 };
+    updateCartSummary({
+      count: getCount(newCountState),
+      total: getTotal(newProductsState, newCountState),
+    });
     setCount({ ...countState, [removeId]: 0 });
     localStorage.cartData = JSON.stringify(newProductsState);
     const newPageCount =
@@ -68,13 +86,22 @@ const CartPage = () => {
     const newCount = countState[currentId] - 1;
     if (newCount < 1) {
       const newProductsState = products.filter(({ id }) => id !== currentId);
-      setProducts(newProductsState);
+      const newCountState: CountState = { ...countState, [currentId]: 0 };
+      updateCartSummary({
+        count: getCount(newCountState),
+        total: getTotal(newProductsState, newCountState),
+      });
+      updateCart(newProductsState);
       setCount({ ...countState, [currentId]: 0 });
       const newPageCount =
         Math.ceil(newProductsState.length / productsPerPage) || 1;
       setPageCount(newPageCount);
     }
-    const newCountState = { ...countState, [currentId]: newCount };
+    const newCountState: CountState = { ...countState, [currentId]: newCount };
+    updateCartSummary({
+      count: getCount(newCountState),
+      total: getTotal(products, newCountState),
+    });
     setCount(newCountState);
   };
   const incrementHendler = (id: number) => () => {
@@ -85,12 +112,19 @@ const CartPage = () => {
       setIdWithError(id);
       return;
     }
-    setCount({ ...countState, [id]: newCount });
+    const newCountState: CountState = { ...countState, [id]: newCount };
+    updateCartSummary({
+      count: getCount(newCountState),
+      total: getTotal(products, newCountState),
+    });
+
+    setCount(newCountState);
   };
 
   const lastProductIndex = currentPage * productsPerPage;
   const firstProductIndex = lastProductIndex - productsPerPage;
   const currentProducts = products.slice(firstProductIndex, lastProductIndex);
+
   return (
     <section className='cart'>
       <h1>Cart</h1>

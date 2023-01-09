@@ -5,7 +5,8 @@ import { IProduct } from '../../types';
 import './product.css';
 
 const Product = (data: IProduct) => {
-  const { cart, updateCart } = useContext(Context);
+  const { cart, updateCart, cartSummary, updateCartSummary } =
+    useContext(Context);
   const addToCardHendler =
     (data: IProduct) => (event: { preventDefault: () => void }) => {
       event.preventDefault();
@@ -14,6 +15,10 @@ const Product = (data: IProduct) => {
         console.log('Product already added to the Cart');
         return;
       }
+      updateCartSummary({
+        total: cartSummary.total + data.price,
+        count: cartSummary.count + 1,
+      });
       updateCart([...cart, data]);
     };
 

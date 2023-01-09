@@ -1,13 +1,15 @@
-import React, { useContext, useState } from 'react';
+import { useContext } from 'react';
 import cartImg from './cart.png';
 import shopImg from './shop.png';
 import './header.css';
 import { Link } from 'react-router-dom';
-import Summary from '../../pages/CartPage/Summary/Summary';
+import { Context } from '../../context/Context';
 
 const Header = () => {
-  const total = 0;
-  const count = 0;
+  const {
+    cartSummary: { total, count },
+  } = useContext(Context);
+  console.log(useContext(Context));
   return (
     <div className='header'>
       <Link to={'/'}>
