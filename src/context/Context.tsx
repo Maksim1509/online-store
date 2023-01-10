@@ -2,30 +2,37 @@ import React, { createContext, useState } from 'react';
 import { IProduct } from '../types';
 
 type CartSummary = {
-  count: number;
-  total: number;
+  productsCount: number;
+  totalCoast: number;
 };
 
+export interface ICartState {
+  id: number;
+  data: IProduct;
+  count: number;
+  price: number;
+}
+
 export interface IContext {
-  cart: IProduct[];
-  updateCart: (data: IProduct[]) => void;
+  cartProducts: ICartState[];
+  updateCart: (data: ICartState[]) => void;
   cartSummary: CartSummary;
   updateCartSummary: (cartSummary: CartSummary) => void;
 }
 
-const localContext: IProduct[] = localStorage.cartData
-  ? JSON.parse(localStorage.cartData)
+const localContext: ICartState[] = localStorage.cartProducts
+  ? JSON.parse(localStorage.cartProducts)
   : [];
-const localContextCartSummary: CartSummary = localStorage.cartSummary
+const localcartSummaryContext: CartSummary = localStorage.cartSummary
   ? JSON.parse(localStorage.cartSummary)
-  : { count: 0, total: 0 };
+  : { productsCount: 0, totalCoast: 0 };
 
 const context: IContext = {
-  cart: localContext,
+  cartProducts: localContext,
   updateCart: () => {
     return;
   },
-  cartSummary: localContextCartSummary,
+  cartSummary: localcartSummaryContext,
   updateCartSummary: () => {
     return;
   },
@@ -34,23 +41,23 @@ const context: IContext = {
 export const Context = createContext<IContext>(context);
 
 const ContextState = ({ children }: { children: React.ReactNode }) => {
-  const [cart, setCart] = useState(context.cart);
+  const [cartProducts, setCartProducts] = useState(context.cartProducts);
   const [cartSummary, setCartSummary] = useState(context.cartSummary);
-  const updateCart = (data: IProduct[]) => {
+  const updateCart = (data: ICartState[]) => {
     localStorage.cartData = JSON.stringify(data);
-    setCart(data);
+    setCartProducts(data);
   };
   const updateCartSummary = (data: CartSummary) => {
-    localStorage.cartSummary = JSON.stringify(data);
+    localStorage.cartData = JSON.stringify(data);
     setCartSummary(data);
   };
 
   return (
     <Context.Provider
       value={{
-        cart,
-        updateCart,
+        cartProducts,
         cartSummary,
+        updateCart,
         updateCartSummary,
       }}
     >

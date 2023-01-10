@@ -5,21 +5,24 @@ import './productWithImgs.css';
 import { useState } from 'react';
 
 const ProductWithImgs = (data: IProduct) => {
-  const { cart, updateCart, cartSummary, updateCartSummary } =
+  const { cartProducts, updateCart, cartSummary, updateCartSummary } =
     useContext(Context);
   const [selectedImage, setSelectedImage] = useState(data.images[0]);
 
   const addToCardHendler = (data: IProduct) => () => {
-    const isAdded = cart.filter(({ id }) => id === data.id).length;
+    const isAdded = cartProducts.filter(({ id }) => id === data.id).length;
     if (isAdded) {
       console.log('Product already added to the Cart');
       return;
     }
     updateCartSummary({
-      total: cartSummary.total + data.price,
-      count: cartSummary.count + 1,
+      productsCount: cartSummary.productsCount + 1,
+      totalCoast: cartSummary.totalCoast + data.price,
     });
-    updateCart([...cart, data]);
+    updateCart([
+      ...cartProducts,
+      { id: data.id, count: 1, price: data.price, data },
+    ]);
   };
 
   const handleImageClick = (image: string) => {

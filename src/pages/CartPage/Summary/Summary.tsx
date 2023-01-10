@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from 'react';
 import './summary.css';
 
 interface ISummaryProps {
-  count: number;
-  total: number;
+  productsCount: number;
+  totalCoast: number;
   modalShow: () => void;
 }
 
@@ -24,7 +24,7 @@ type ApllyCodesState = {
 const invalidCodeMessage = 'This is the wrong promo code';
 
 const Summary = (props: ISummaryProps) => {
-  const { count, total, modalShow } = props;
+  const { productsCount, totalCoast, modalShow } = props;
   const [inputCodeValue, setInputCodeValue] = useState('');
   const [applyCodes, setApplyCodes] = useState<ApllyCodesState>({});
   const [invalidCode, setInvalidCode] = useState('');
@@ -74,7 +74,7 @@ const Summary = (props: ISummaryProps) => {
 
   return (
     <section className='summary'>
-      <span>Products: {count}</span>
+      <span>Products: {productsCount}</span>
       <span
         className={
           totalDiscont
@@ -82,10 +82,12 @@ const Summary = (props: ISummaryProps) => {
             : 'summary__total'
         }
       >
-        Total: ${total}
+        Total: ${totalCoast}
       </span>
       {!!totalDiscont && (
-        <span>Total: ${Math.round((total / 100) * (100 - totalDiscont))}</span>
+        <span>
+          Total: ${Math.round((totalCoast / 100) * (100 - totalDiscont))}
+        </span>
       )}
       <div className='summary__promo-wrap'>
         <input

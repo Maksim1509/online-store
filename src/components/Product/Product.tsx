@@ -6,20 +6,23 @@ import './product.css';
 
 const Product = (data: IProduct) => {
   const navigate = useNavigate();
-  const { cart, updateCart, cartSummary, updateCartSummary } =
+  const { cartProducts, cartSummary, updateCart, updateCartSummary } =
     useContext(Context);
   const addToCardHendler = (data: IProduct) => (e: React.MouseEvent) => {
     e.stopPropagation();
-    const isAdded = cart.filter(({ id }) => id === data.id).length;
+    const isAdded = cartProducts.filter(({ id }) => id === data.id).length;
     if (isAdded) {
       console.log('Product already added to the Cart');
       return;
     }
     updateCartSummary({
-      total: cartSummary.total + data.price,
-      count: cartSummary.count + 1,
+      productsCount: cartSummary.productsCount + 1,
+      totalCoast: cartSummary.totalCoast + data.price,
     });
-    updateCart([...cart, data]);
+    updateCart([
+      ...cartProducts,
+      { id: data.id, count: 1, price: data.price, data },
+    ]);
   };
   const linkProductHendler = (id: number) => () => {
     navigate(`product/${id}`);

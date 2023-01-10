@@ -57,3 +57,7 @@
   width: 300px;
   margin-top: 20px;
 }
+
+.cart__item .addBtn {
+  display: none;
+}

@@ -3,21 +3,16 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from './Pagination/Pagination';
 import Product from '../../components/Product/Product';
 import Summary from './Summary/Summary';
-import { Context } from '../../context/Context';
+import { Context, ICartState } from '../../context/Context';
 import './cart.css';
 import Modal from '../../components/Modal/Modal';
-import { IProduct } from '../../types';
 
-type CountState = {
-  [key: string]: number;
-};
+const getTotalCount = (state: ICartState[]): number =>
+  state.reduce((acc, { count }) => acc + count, 0);
 
-const getCount = (state: CountState): number =>
-  Object.values(state).reduce((acc, val) => acc + val, 0);
-
-const getTotal = (state: IProduct[], countState: CountState): number =>
-  state.reduce((acc, item) => {
-    const sum = item.price * countState[item.id];
+const getTotalCoast = (state: ICartState[]): number =>
+  state.reduce((acc, { count, price }) => {
+    const sum = count * price;
     return acc + sum;
   }, 0);
 
@@ -26,7 +21,8 @@ const CartPage = () => {
 
   const modalShow = () => setModal(true);
   const modalClose = () => setModal(false);
-  const { cart: products, updateCart, updateCartSummary } = useContext(Context);
+  const { cartProducts, updateCart, cartSummary, updateCartSummary } =
+    useContext(Context);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -49,13 +45,9 @@ const CartPage = () => {
   const [currentPage, setCurrentPage] = useState(pageInit);
   const [idWithError, setIdWithError] = useState<null | number>(null);
   const [pageCount, setPageCount] = useState(
-    Math.ceil(products.length / productsPerPage)
+    Math.ceil(cartProducts.length / productsPerPage)
   );
 
-  const countStateInit = Object.fromEntries(
-    products.map((item) => [item.id, 1])
-  );
-  const [countState, setCount] = useState<CountState>(countStateInit);
   useEffect(() => {
     if (currentPage > pageCount) {
       const productsPerPage = searchParams.get('productsPerPage');
@@ -68,14 +60,12 @@ const CartPage = () => {
   }, [currentPage, pageCount, navigate, searchParams]);
 
   const removeProductHandler = (removeId: number) => () => {
-    const newProductsState = products.filter(({ id }) => id !== removeId);
+    const newProductsState = cartProducts.filter(({ id }) => id !== removeId);
     updateCart(newProductsState);
-    const newCountState: CountState = { ...countState, [removeId]: 0 };
     updateCartSummary({
-      count: getCount(newCountState),
-      total: getTotal(newProductsState, newCountState),
+      productsCount: getTotalCount(newProductsState),
+      totalCoast: getTotalCoast(newProductsState),
     });
-    setCount({ ...countState, [removeId]: 0 });
     localStorage.cartData = JSON.stringify(newProductsState);
     const newPageCount =
       Math.ceil(newProductsState.length / productsPerPage) || 1;
@@ -83,54 +73,70 @@ const CartPage = () => {
   };
   const decrementHendler = (currentId: number) => () => {
     setIdWithError(null);
-    const newCount = countState[currentId] - 1;
-    if (newCount < 1) {
-      const newProductsState = products.filter(({ id }) => id !== currentId);
-      const newCountState: CountState = { ...countState, [currentId]: 0 };
+    const curentProduct = cartProducts.find(
+      ({ id }) => id === currentId
+    ) as ICartState;
+    if (curentProduct.count === 1) {
+      const newProductsState = cartProducts.filter(
+        ({ id }) => id !== currentId
+      );
       updateCartSummary({
-        count: getCount(newCountState),
-        total: getTotal(newProductsState, newCountState),
+        productsCount: getTotalCount(newProductsState),
+        totalCoast: getTotalCoast(newProductsState),
       });
       updateCart(newProductsState);
-      setCount({ ...countState, [currentId]: 0 });
       const newPageCount =
         Math.ceil(newProductsState.length / productsPerPage) || 1;
       setPageCount(newPageCount);
+      return;
     }
-    const newCountState: CountState = { ...countState, [currentId]: newCount };
-    updateCartSummary({
-      count: getCount(newCountState),
-      total: getTotal(products, newCountState),
+    const newProductsState = cartProducts.map((product) => {
+      if (product.id === currentId) {
+        const copyProduct = { ...product, count: product.count - 1 };
+        return copyProduct;
+      }
+      return product;
     });
-    setCount(newCountState);
+    updateCart(newProductsState);
+    updateCartSummary({
+      productsCount: getTotalCount(newProductsState),
+      totalCoast: getTotalCoast(newProductsState),
+    });
   };
   const incrementHendler = (id: number) => () => {
-    const newCount = countState[id] + 1;
-    const item = products.find((item) => item.id === id);
-    if (!item) throw new Error('Item not found');
-    if (item.stock < newCount) {
+    const item = cartProducts.find((item) => item.id === id) as ICartState;
+    const newCount = item.count + 1;
+    if (item.data.stock < newCount) {
       setIdWithError(id);
       return;
     }
-    const newCountState: CountState = { ...countState, [id]: newCount };
-    updateCartSummary({
-      count: getCount(newCountState),
-      total: getTotal(products, newCountState),
+    const newProductsState = cartProducts.map((product) => {
+      if (product.id === id) {
+        const copyProduct = { ...product, count: newCount };
+        return copyProduct;
+      }
+      return product;
     });
-
-    setCount(newCountState);
+    updateCart(newProductsState);
+    updateCartSummary({
+      productsCount: getTotalCount(newProductsState),
+      totalCoast: getTotalCoast(newProductsState),
+    });
   };
 
   const lastProductIndex = currentPage * productsPerPage;
   const firstProductIndex = lastProductIndex - productsPerPage;
-  const currentProducts = products.slice(firstProductIndex, lastProductIndex);
+  const currentProducts = cartProducts.slice(
+    firstProductIndex,
+    lastProductIndex
+  );
 
   return (
     <section className='cart'>
       <h1>Cart</h1>
       <div className='cart__pagination'>
         <Pagination
-          itemCount={products.length}
+          itemCount={cartProducts.length}
           itemsPerPage={productsPerPage}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -145,50 +151,34 @@ const CartPage = () => {
           <span>Count</span>
           <span>SUM$</span>
         </li>
-        {currentProducts.map((product) => (
-          <li className='cart__item' key={product.id}>
+        {currentProducts.map(({ id, count, price, data }) => (
+          <li className='cart__item' key={data.id}>
             <div>
-              <Product {...product} />
+              <Product {...data} />
             </div>
             <div className='cart__counter'>
-              <button
-                className='cart__btn'
-                onClick={incrementHendler(product.id)}
-              >
-                {product.id === idWithError && (
+              <button className='cart__btn' onClick={incrementHendler(id)}>
+                {data.id === idWithError && (
                   <span className='cart__error-message'>
-                    The maximum count of goods {product.stock}pcs
+                    The maximum count of goods {data.stock}pcs
                   </span>
                 )}
                 +
               </button>
-              <span className='cart__count'>{countState[product.id]}</span>
-              <button
-                className='cart__btn'
-                onClick={decrementHendler(product.id)}
-              >
+              <span className='cart__count'>{count}</span>
+              <button className='cart__btn' onClick={decrementHendler(id)}>
                 -
               </button>
-              <button
-                className='cart__btn'
-                onClick={removeProductHandler(product.id)}
-              >
+              <button className='cart__btn' onClick={removeProductHandler(id)}>
                 Remove
               </button>
             </div>
-            <span>SUM: ${product.price * countState[product.id]}</span>
+            <span>SUM: ${price * count}</span>
           </li>
         ))}
       </ul>
       <section className='cart__summary'>
-        <Summary
-          count={Object.values(countState).reduce((acc, val) => acc + val, 0)}
-          total={products.reduce((acc, item) => {
-            const sum = item.price * countState[item.id];
-            return acc + sum;
-          }, 0)}
-          modalShow={modalShow}
-        />
+        <Summary {...cartSummary} modalShow={modalShow} />
       </section>
       {modal && <Modal modalClose={modalClose} />}
     </section>
