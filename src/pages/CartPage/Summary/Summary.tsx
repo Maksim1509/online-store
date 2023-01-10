@@ -1,4 +1,5 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
+import { Context } from '../../../context/Context';
 import './summary.css';
 
 interface ISummaryProps {
@@ -23,7 +24,11 @@ type ApllyCodesState = {
 };
 const invalidCodeMessage = 'This is the wrong promo code';
 
+const calculateTotal = (total: number, discont: number): number =>
+  Math.round((total / 100) * (100 - discont));
+
 const Summary = (props: ISummaryProps) => {
+  const { cartSummary, updateCartSummary } = useContext(Context);
   const { count, total, modalShow } = props;
   const [inputCodeValue, setInputCodeValue] = useState('');
   const [applyCodes, setApplyCodes] = useState<ApllyCodesState>({});
@@ -45,7 +50,12 @@ const Summary = (props: ISummaryProps) => {
     if (code) {
       const { value } = code;
       if (!applyCodes[code.id]) {
-        setTotalDiscont(value + totalDiscont);
+        const newDiscont = value + totalDiscont;
+        updateCartSummary({
+          count,
+          total: calculateTotal(total, newDiscont),
+        });
+        setTotalDiscont(newDiscont);
       }
       setApplyCodes({ ...applyCodes, [code.id]: code });
       setInputCodeValue('');
@@ -56,7 +66,12 @@ const Summary = (props: ISummaryProps) => {
   const dropCodeHandler = (idForDrop: number) => () => {
     const copyApplyCodes = { ...applyCodes };
     delete copyApplyCodes[idForDrop];
-    setTotalDiscont(totalDiscont - applyCodes[idForDrop].value);
+    const newDiscont = totalDiscont - applyCodes[idForDrop].value;
+    setTotalDiscont(newDiscont);
+    updateCartSummary({
+      count,
+      total: calculateTotal(total, newDiscont),
+    });
     setApplyCodes(copyApplyCodes);
   };
 
@@ -84,9 +99,7 @@ const Summary = (props: ISummaryProps) => {
       >
         Total: ${total}
       </span>
-      {!!totalDiscont && (
-        <span>Total: ${Math.round((total / 100) * (100 - totalDiscont))}</span>
-      )}
+      {!!totalDiscont && <span>Total: ${cartSummary.total}</span>}
       <div className='summary__promo-wrap'>
         <input
           onChange={inputCodeHandler}
