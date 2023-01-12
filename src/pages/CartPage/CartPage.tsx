@@ -151,9 +151,10 @@ const CartPage = () => {
           <span>Count</span>
           <span>SUM$</span>
         </li>
-        {currentProducts.map(({ id, count, price, data }) => (
+        {currentProducts.map(({ id, count, price, data }, orderNumber) => (
           <li className='cart__item' key={data.id}>
-            <div>
+            <div className='cart__product'>
+              <b className='cart__product-order'>{orderNumber + 1}</b>{' '}
               <Product {...data} />
             </div>
             <div className='cart__counter'>

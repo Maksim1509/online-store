@@ -61,3 +61,7 @@
 .cart__item .addBtn {
   display: none;
 }
+
+.cart__product-order {
+  color: #0078d7;
+}
