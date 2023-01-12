@@ -179,7 +179,11 @@ const CartPage = () => {
         ))}
       </ul>
       <section className='cart__summary'>
-        <Summary {...cartSummary} modalShow={modalShow} />
+        {cartProducts.length ? (
+          <Summary {...cartSummary} modalShow={modalShow} />
+        ) : (
+          <h2>Cart is Empty</h2>
+        )}
       </section>
       {modal && <Modal modalClose={modalClose} />}
     </section>

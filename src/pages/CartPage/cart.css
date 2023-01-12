@@ -58,7 +58,8 @@
   margin-top: 20px;
 }
 
-.cart__item .addBtn {
+.cart__item .addBtn,
+.cart__item .removeBtn {
   display: none;
 }
 
