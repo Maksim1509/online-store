@@ -3,12 +3,12 @@ import cartImg from './cart.png';
 import shopImg from './shop.png';
 import './header.css';
 import { Link } from 'react-router-dom';
-import { Context } from '../../context/Context';
+import { cartContext } from '../../context/CartState';
 
 const Header = () => {
   const {
     cartSummary: { totalCoast, productsCount },
-  } = useContext(Context);
+  } = useContext(cartContext);
 
   return (
     <div className='header'>

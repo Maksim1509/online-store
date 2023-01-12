@@ -38,9 +38,9 @@ const context: IContext = {
   },
 };
 
-export const Context = createContext<IContext>(context);
+export const cartContext = createContext<IContext>(context);
 
-const ContextState = ({ children }: { children: React.ReactNode }) => {
+const CartState = ({ children }: { children: React.ReactNode }) => {
   const [cartProducts, setCartProducts] = useState(context.cartProducts);
   const [cartSummary, setCartSummary] = useState(context.cartSummary);
   const updateCart = (data: ICartState[]) => {
@@ -53,7 +53,7 @@ const ContextState = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <Context.Provider
+    <cartContext.Provider
       value={{
         cartProducts,
         cartSummary,
@@ -62,8 +62,8 @@ const ContextState = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-    </Context.Provider>
+    </cartContext.Provider>
   );
 };
 
-export default ContextState;
+export default CartState;

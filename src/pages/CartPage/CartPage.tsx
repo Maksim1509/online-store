@@ -3,9 +3,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from './Pagination/Pagination';
 import Product from '../../components/Product/Product';
 import Summary from './Summary/Summary';
-import { Context, ICartState } from '../../context/Context';
+import { cartContext, ICartState } from '../../context/CartState';
 import './cart.css';
 import Modal from '../../components/Modal/Modal';
+import { modalContext } from '../../context/ModalState';
 
 const getTotalCount = (state: ICartState[]): number =>
   state.reduce((acc, { count }) => acc + count, 0);
@@ -17,12 +18,9 @@ const getTotalCoast = (state: ICartState[]): number =>
   }, 0);
 
 const CartPage = () => {
-  const [modal, setModal] = useState(false);
-
-  const modalShow = () => setModal(true);
-  const modalClose = () => setModal(false);
   const { cartProducts, updateCart, cartSummary, updateCartSummary } =
-    useContext(Context);
+    useContext(cartContext);
+  const { modal, showModal } = useContext(modalContext);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -180,12 +178,12 @@ const CartPage = () => {
       </ul>
       <section className='cart__summary'>
         {cartProducts.length ? (
-          <Summary {...cartSummary} modalShow={modalShow} />
+          <Summary {...cartSummary} modalShow={showModal} />
         ) : (
           <h2>Cart is Empty</h2>
         )}
       </section>
-      {modal && <Modal modalClose={modalClose} />}
+      {modal && <Modal />}
     </section>
   );
 };

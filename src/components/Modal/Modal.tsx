@@ -4,7 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import './modal.css';
 import { useNavigate } from 'react-router-dom';
-import { Context } from '../../context/Context';
+import { cartContext } from '../../context/CartState';
+import { modalContext } from '../../context/ModalState';
 
 interface IFormInputs {
   name: string;
@@ -14,10 +15,6 @@ interface IFormInputs {
   cardNumber: string;
   cardDate: string;
   cvv: string;
-}
-
-interface IModalProps {
-  modalClose: () => void;
 }
 
 const schema = yup.object({
@@ -53,10 +50,11 @@ const schema = yup.object({
   cvv: yup.string().required(),
 });
 
-const Modal = (props: IModalProps) => {
-  const { updateCart, updateCartSummary } = useContext(Context);
+const Modal = () => {
+  const { updateCart, updateCartSummary } = useContext(cartContext);
+  const { hideModal } = useContext(modalContext);
   const navigate = useNavigate();
-  const { modalClose } = props;
+
   const [isLoading, setLoading] = useState(false);
   const [cardDate, setCarDate] = useState('');
   const {
@@ -74,7 +72,7 @@ const Modal = (props: IModalProps) => {
       setLoading(false);
       updateCart([]);
       updateCartSummary({ totalCoast: 0, productsCount: 0 });
-      modalClose();
+      hideModal();
       navigate('/');
     }, 3000);
   };
@@ -119,7 +117,7 @@ const Modal = (props: IModalProps) => {
   });
   return (
     <>
-      <div className='modal__backdrop' onClick={modalClose}></div>
+      <div className='modal__backdrop' onClick={hideModal}></div>
       <div className='modal'>
         <form className='purchase__form' onSubmit={handleSubmit(onSubmit)}>
           Personal details

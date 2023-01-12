@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Context } from '../../context/Context';
+import { cartContext } from '../../context/CartState';
 import { IProduct } from '../../types';
 import './product.css';
 
 const Product = (data: IProduct) => {
   const navigate = useNavigate();
   const { cartProducts, cartSummary, updateCart, updateCartSummary } =
-    useContext(Context);
+    useContext(cartContext);
 
   const isAdded: number = cartProducts.filter(
     ({ id }) => id === data.id
@@ -43,7 +43,7 @@ const Product = (data: IProduct) => {
     <section className='product' onClick={linkProductHendler(data.id)}>
       <h3>Category: {data.category}</h3>
       <h3>{data.title}</h3>
-      <span>Price: {data.price}</span>
+      <span>Price: ${data.price}</span>
       <p>{data.description}</p>
       <span>Stok: {data.stock}</span>
       <img className='product__img' src={data.images[0]} alt={data.title} />
