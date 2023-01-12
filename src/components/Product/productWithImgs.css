@@ -7,20 +7,30 @@
 .slider-container {
   display: flex;
   justify-content: center;
+  column-gap: 15px;
+  margin-bottom: 15px;
 }
 
+.slider-container img {
+  border: 2px solid #0078d7;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slider-container img:hover {
+  transform: scale(120%);
+}
 
 .selected-image img {
   width: 400px;
   height: 400px;
   display: block;
-  margin: 0 auto;
+  margin: 15px auto;
 }
 
 .productPage {
-  /* width: 100%; */
-  height: 100vh;
   display: flex;
   margin: 0 auto;
   flex-direction: column;
+  padding-bottom: 60px;
 }
