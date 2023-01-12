@@ -1,20 +1,19 @@
 import { useContext } from 'react';
 import { Context } from '../../context/Context';
 import { IProduct } from '../../types';
-import './productWithImgs.css';
 import { useState } from 'react';
+import './productWithImgs.css';
 
 const ProductWithImgs = (data: IProduct) => {
   const { cartProducts, updateCart, cartSummary, updateCartSummary } =
     useContext(Context);
   const [selectedImage, setSelectedImage] = useState(data.images[0]);
 
+  const isAdded: number = cartProducts.filter(
+    ({ id }) => id === data.id
+  ).length;
+
   const addToCardHendler = (data: IProduct) => () => {
-    const isAdded = cartProducts.filter(({ id }) => id === data.id).length;
-    if (isAdded) {
-      console.log('Product already added to the Cart');
-      return;
-    }
     updateCartSummary({
       productsCount: cartSummary.productsCount + 1,
       totalCoast: cartSummary.totalCoast + data.price,
@@ -23,6 +22,16 @@ const ProductWithImgs = (data: IProduct) => {
       ...cartProducts,
       { id: data.id, count: 1, price: data.price, data },
     ]);
+  };
+
+  const dropFromCardHendler = (data: IProduct) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newCartProducts = cartProducts.filter(({ id }) => id !== data.id);
+    updateCartSummary({
+      totalCoast: cartSummary.totalCoast - data.price,
+      productsCount: cartSummary.productsCount - 1,
+    });
+    updateCart(newCartProducts);
   };
 
   const handleImageClick = (image: string) => {
@@ -50,9 +59,15 @@ const ProductWithImgs = (data: IProduct) => {
           />
         ))}
       </div>
-      <button className='addBtn' onClick={addToCardHendler(data)}>
-        Add to cart
-      </button>
+      {isAdded ? (
+        <button className='removeBtn' onClick={dropFromCardHendler(data)}>
+          Drop from cart
+        </button>
+      ) : (
+        <button className='addBtn' onClick={addToCardHendler(data)}>
+          Add to cart
+        </button>
+      )}
     </section>
   );
 };

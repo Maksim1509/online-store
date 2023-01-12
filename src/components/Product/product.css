@@ -13,7 +13,8 @@
   object-fit: contain;
 }
 
-.addBtn {
+.addBtn,
+.removeBtn {
   margin-top: 4px;
   padding-left: 10px;
   width: 100%;
@@ -26,5 +27,13 @@
 }
 
 .addBtn:hover {
+  background-color: #0078d7;
+}
+
+.removeBtn {
+  color: brown;
+}
+
+.removeBtn:hover {
   background-color: #0078d7;
 }
