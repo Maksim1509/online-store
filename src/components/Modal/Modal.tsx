@@ -54,7 +54,7 @@ const schema = yup.object({
 });
 
 const Modal = (props: IModalProps) => {
-  const { updateCart } = useContext(Context);
+  const { updateCart, updateCartSummary } = useContext(Context);
   const navigate = useNavigate();
   const { modalClose } = props;
   const [isLoading, setLoading] = useState(false);
@@ -73,6 +73,7 @@ const Modal = (props: IModalProps) => {
     setTimeout(() => {
       setLoading(false);
       updateCart([]);
+      updateCartSummary({ totalCoast: 0, productsCount: 0 });
       modalClose();
       navigate('/');
     }, 3000);

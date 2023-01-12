@@ -44,11 +44,11 @@ const ContextState = ({ children }: { children: React.ReactNode }) => {
   const [cartProducts, setCartProducts] = useState(context.cartProducts);
   const [cartSummary, setCartSummary] = useState(context.cartSummary);
   const updateCart = (data: ICartState[]) => {
-    localStorage.cartData = JSON.stringify(data);
+    localStorage.cartProducts = JSON.stringify(data);
     setCartProducts(data);
   };
   const updateCartSummary = (data: CartSummary) => {
-    localStorage.cartData = JSON.stringify(data);
+    localStorage.cartSummary = JSON.stringify(data);
     setCartSummary(data);
   };
 

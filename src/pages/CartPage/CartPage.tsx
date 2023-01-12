@@ -66,7 +66,7 @@ const CartPage = () => {
       productsCount: getTotalCount(newProductsState),
       totalCoast: getTotalCoast(newProductsState),
     });
-    localStorage.cartData = JSON.stringify(newProductsState);
+    localStorage.cartProducts = JSON.stringify(newProductsState);
     const newPageCount =
       Math.ceil(newProductsState.length / productsPerPage) || 1;
     setPageCount(newPageCount);
