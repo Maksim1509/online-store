@@ -5,8 +5,9 @@
   justify-content: space-between;
   border: 2px solid #0078d7;
   padding: 10px;
-  max-width: 300px;
+  min-width: 300px;
   min-height: 500px;
+  width: 21%;
 }
 
 .product__img {

@@ -1,8 +1,9 @@
 import { ChangeEvent, useState } from 'react';
-import { IProduct } from '../../../types';
+import { IProduct } from '../../../../types';
+import RengeFilter from '../RangeFilter/RengeFilter';
 import './filter.css';
 
-interface IFilterProps {
+export interface IFilterProps {
   products: IProduct[];
   productsData: IProduct[];
   setProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
@@ -16,6 +17,8 @@ export enum filterCriterion {
 export interface IFilterState {
   category: string[];
   brand: string[];
+  price: [number, number];
+  stock: [number, number];
 }
 
 interface ICount {
@@ -27,14 +30,33 @@ export type FilterList = {
   [key: string]: ICount;
 };
 
-const filter = (data: IProduct[], state: IFilterState): IProduct[] => {
-  const { category, brand } = state;
+export const getBounds = (
+  data: IProduct[],
+  type: 'price' | 'stock'
+): [number, number] => {
+  const sorted = data.slice().sort((itemA, itemB) => itemA[type] - itemB[type]);
+  const lastIndex = data.length - 1;
+  return [sorted[0][type], sorted[lastIndex][type]];
+};
 
+const filter = (data: IProduct[], state: IFilterState): IProduct[] => {
+  const {
+    category,
+    brand,
+    price: [minPrice, maxPrice],
+    stock: [minStock, maxStock],
+  } = state;
+  const filteredByStock = data.filter(
+    (item) => item.stock >= minStock && item.stock <= maxStock
+  );
+  const filteredByPrice = filteredByStock.filter(
+    (item) => item.price >= minPrice && item.stock <= maxPrice
+  );
   if (category.length === 0)
-    return data.filter((item) => brand.includes(item.brand));
+    return filteredByPrice.filter((item) => brand.includes(item.brand));
   if (brand.length === 0)
-    return data.filter((item) => category.includes(item.category));
-  return data.filter(
+    return filteredByPrice.filter((item) => category.includes(item.category));
+  return filteredByPrice.filter(
     (item): boolean =>
       brand.includes(item.brand) && category.includes(item.category)
   );
@@ -62,11 +84,16 @@ const updateFilter = (
   }, temp);
 
 const Filter = (props: IFilterProps) => {
+  const { products, productsData, setProducts } = props;
+  const [minPrice, maxPrice] = getBounds(productsData, 'price');
+  const [minStock, maxStock] = getBounds(productsData, 'stock');
+
   const [filterState, setFilterState] = useState<IFilterState>({
     category: [],
     brand: [],
+    price: [minPrice, maxPrice],
+    stock: [minStock, maxStock],
   });
-  const { products, productsData, setProducts } = props;
 
   const tempCategory = getTempFilter(productsData, filterCriterion.category);
   const tempBrand = getTempFilter(productsData, filterCriterion.brand);
@@ -96,7 +123,35 @@ const Filter = (props: IFilterProps) => {
       }
       setProducts(filter(productsData, newState));
     };
-  console.log(filterState);
+
+  const applyFilterPriceHandler = (min: number, max: number) => {
+    const filtered = products.filter(
+      (item) => item.price >= min && item.price <= max
+    );
+    const stockBounds = getBounds(filtered, 'stock');
+    setFilterState({ ...filterState, stock: stockBounds, price: [min, max] });
+    setProducts(filtered);
+  };
+
+  const applyFilterStockHandler = (min: number, max: number) => {
+    const filtered = products.filter(
+      (item) => item.stock >= min && item.stock <= max
+    );
+    const priceBounds = getBounds(filtered, 'price');
+    setFilterState({ ...filterState, price: priceBounds, stock: [min, max] });
+    setProducts(filtered);
+  };
+
+  const resetFilterHandler = () => {
+    setFilterState({
+      category: [],
+      brand: [],
+      price: [minPrice, maxPrice],
+      stock: [minStock, maxStock],
+    });
+    setProducts(productsData);
+  };
+
   const renderFilterList = (data: FilterList, criterion: filterCriterion) => {
     return Object.entries(data).map(([name, { current, total }], index) => (
       <li className='filter__item' key={index}>
@@ -107,11 +162,12 @@ const Filter = (props: IFilterProps) => {
             id=''
             onChange={changeHandler(name, criterion)}
           />
-          {name}: {`${current} / ${total}`}
+          {name}: {`[${current} / ${total}]`}
         </label>
       </li>
     ));
   };
+  console.log(filterState);
   return (
     <>
       <section className='filter'>
@@ -125,6 +181,21 @@ const Filter = (props: IFilterProps) => {
         <ul className='filter__list'>
           {renderFilterList(brandFilterList, filterCriterion.brand)}
         </ul>
+      </section>
+      <section className='filter'>
+        <h4>Price</h4>
+        <RengeFilter
+          value={filterState.price}
+          applyFilterHandler={applyFilterPriceHandler}
+        />
+        <h4>Stock</h4>
+        <RengeFilter
+          value={filterState.stock}
+          applyFilterHandler={applyFilterStockHandler}
+        />
+        <button className='filter__btn' onClick={resetFilterHandler}>
+          Reset Filter
+        </button>
       </section>
     </>
   );

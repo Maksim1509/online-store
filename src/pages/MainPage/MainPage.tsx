@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Product from '../../components/Product/Product';
 import data from '../../data/data.json';
 import { IProduct } from '../../types';
-import Filter from './components/Filter';
+import Filter from './components/Filter/Filter';
 import './mainPage.css';
 
 const productsData = data.products;
