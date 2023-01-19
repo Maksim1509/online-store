@@ -47,7 +47,7 @@ const schema = yup.object({
   cardDate: yup
     .string()
     .matches(/(0[1-9]|1[0-2])\/([0-9]{2})/, 'Wrong card expiration date'),
-  cvv: yup.string().required(),
+  cvv: yup.string().matches(/^([0-9]){3}$/, 'Wrong CVV'),
 });
 
 const Modal = () => {

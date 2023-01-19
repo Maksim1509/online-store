@@ -5,18 +5,18 @@
 }
 .pagination__per-page {
   width: 100%;
-  color: #0078d7;
+  color: var(--main-color);
 }
 .pagination__input {
   width: 30px;
-  border: 2px solid #0078d7;
+  border: 2px solid var(--main-color);
   padding: 2px;
   padding-left: 10px;
 }
 
 .pagination__prev,
 .pagination__next {
-  border: 2px solid #0078d7;
+  border: 2px solid var(--main-color);
   border-radius: 4px;
   font-weight: bold;
   background-color: transparent;
@@ -34,7 +34,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 0 10px;
-  color: #0078d7;
+  color: var(--blue);
   font-weight: bold;
 }
 

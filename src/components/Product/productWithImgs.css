@@ -12,7 +12,7 @@
 }
 
 .slider-container img {
-  border: 2px solid #0078d7;
+  border: 2px solid var(--main-color);
   cursor: pointer;
   transition: 0.3s;
 }

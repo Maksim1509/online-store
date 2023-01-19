@@ -1,7 +1,7 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
-
+import { PagParams, setQueryString } from '../../../utils';
 import './pagination.css';
 
 interface IProp {
@@ -13,55 +13,75 @@ interface IProp {
   setPageCount: (num: number) => void;
 }
 
-const Pagination = (prop: IProp) => {
+const getPagesCount = (items: number, itemsPerPage: number): number =>
+  Math.ceil(items / itemsPerPage);
+
+const setLocalStore = (key: string, value: string): void => {
+  localStorage.setItem(key, value);
+};
+
+const Pagination = ({
+  itemCount,
+  itemsPerPage,
+  currentPage,
+  setCurrentPage,
+  setItemsPerPage,
+  setPageCount,
+}: IProp) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const {
-    itemCount,
-    itemsPerPage,
-    currentPage,
-    setCurrentPage,
-    setItemsPerPage,
-    setPageCount,
-  } = prop;
+  const [value, setValue] = useState(itemsPerPage);
+
   const changeHandler = (e: ChangeEvent) => {
     const input = e.target as HTMLInputElement;
     const value = Number(input.value);
-    const newPagesCount = Math.ceil(itemCount / value);
-    setPageCount(newPagesCount);
+    setValue(value);
+  };
+
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault();
     setItemsPerPage(value);
-    localStorage.setItem('productsPerPage', String(value));
-    const pageParam = searchParams.get('page');
-    const queryString = pageParam
-      ? `?page=${pageParam}&productsPerPage=${value}`
-      : `?productsPerPage=${value}`;
-    navigate(queryString);
+    const newPagesCount = getPagesCount(itemCount, value);
+    setPageCount(newPagesCount);
+    setLocalStore('productsPerPage', String(value));
+    setQueryString(
+      searchParams,
+      PagParams.productsPerPage,
+      currentPage,
+      value,
+      navigate
+    );
   };
 
   const prevHandler = () => {
     if (currentPage - 1 === 0) return;
-    localStorage.setItem('currentPage', String(currentPage - 1));
-    const productsPerPage = searchParams.get('productsPerPage');
-    const queryString = productsPerPage
-      ? `?page=${currentPage - 1}&productsPerPage=${productsPerPage}`
-      : `?page=${currentPage - 1}`;
-    navigate(queryString);
     setCurrentPage(currentPage - 1);
+    setLocalStore('currentPage', String(currentPage - 1));
+    setQueryString(
+      searchParams,
+      PagParams.page,
+      currentPage - 1,
+      itemsPerPage,
+      navigate
+    );
   };
 
   const nextHandler = () => {
-    if (currentPage === Math.ceil(itemCount / itemsPerPage)) return;
-    localStorage.setItem('currentPage', String(currentPage + 1));
-    const productsPerPage = searchParams.get('productsPerPage');
-    const queryString = productsPerPage
-      ? `?page=${currentPage + 1}&productsPerPage=${productsPerPage}`
-      : `?page=${currentPage + 1}`;
+    if (currentPage === getPagesCount(itemCount, itemsPerPage)) return;
     setCurrentPage(currentPage + 1);
-    navigate(queryString);
+    setLocalStore('currentPage', String(currentPage + 1));
+    setQueryString(
+      searchParams,
+      PagParams.page,
+      currentPage + 1,
+      itemsPerPage,
+      navigate
+    );
   };
+
   return (
     <div className='pagination'>
-      <div className='pagination__per-page'>
+      <form className='pagination__per-page' onSubmit={submitHandler}>
         <label htmlFor='productsPerPage'>Products Per Page: </label>
         <input
           id='productsPerPage'
@@ -69,10 +89,10 @@ const Pagination = (prop: IProp) => {
           min={1}
           max={10}
           type='number'
-          value={itemsPerPage}
+          value={value}
           onChange={changeHandler}
         />
-      </div>
+      </form>
 
       <button className='pagination__prev' onClick={prevHandler}>
         {'<'}

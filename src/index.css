@@ -1,3 +1,10 @@
+:root {
+  --main-color: #0078d7;
+  --yellow: #fad727;
+  --warning-color: #f80404;
+  --white: #ffffff;
+}
+
 * {
   box-sizing: border-box;
   font-family: sans-serif;

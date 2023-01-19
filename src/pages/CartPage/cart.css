@@ -19,7 +19,7 @@
   grid-template-columns: 3fr 2fr 2fr;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #0078d7;
+  border-bottom: 1px solid var(--main-color);
   padding-bottom: 10px;
 }
 
@@ -33,7 +33,7 @@
   position: relative;
   height: 30px;
   min-width: 40px;
-  background-color: #0078d7;
+  background-color: var(--main-color);
   border: none;
   border-radius: 2px;
   color: #ffffff;
@@ -42,7 +42,7 @@
 }
 
 .cart__error-message {
-  color: #f80404;
+  color: var(--warning-color);
   position: absolute;
   left: 380px;
   top: 300px;
@@ -64,5 +64,5 @@
 }
 
 .cart__product-order {
-  color: #0078d7;
+  color: var(--main-color);
 }
