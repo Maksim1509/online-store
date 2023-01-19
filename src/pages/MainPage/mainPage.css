@@ -1,0 +1,26 @@
+.main {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  column-gap: 20px;
+  padding: 20px;
+}
+
+.main__products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  padding-top: 0;
+}
+
+.main__title {
+  width: 100%;
+}
+
+.main__filters {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}

@@ -1,0 +1,42 @@
+.product {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2px solid var(--main-color);
+  padding: 10px;
+  min-width: 300px;
+  min-height: 500px;
+  width: 21%;
+}
+
+.product__img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+}
+
+.addBtn,
+.removeBtn {
+  margin-top: 4px;
+  padding-left: 10px;
+  width: 100%;
+  height: 30px;
+  border: 2px solid var(--main-color);
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addBtn:hover {
+  background-color: var(--main-color);
+}
+
+.removeBtn {
+  color: brown;
+}
+
+.removeBtn:hover {
+  background-color: var(--main-color);
+}

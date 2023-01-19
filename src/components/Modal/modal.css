@@ -1,0 +1,105 @@
+.modal {
+  width: 400px;
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  padding: 40px;
+  transform: translateX(-50%);
+  background-color: var(--white);
+}
+
+.modal__backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(1px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.purchase__form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  font-size: 22px;
+}
+
+.purchase__label {
+  position: relative;
+  font-size: 16px;
+}
+
+.purchase__field {
+  margin-top: 4px;
+  padding-left: 10px;
+  width: 100%;
+  height: 30px;
+  border: 2px solid var(--main-color);
+  outline: none;
+}
+
+.purchase__sumbit {
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.purchase__sumbit:hover {
+  background-color: var(--main-color);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
+  border: 2px solid var(--main-color);
+  padding: 20px;
+  font-size: 16px;
+  row-gap: 20px;
+}
+
+.card__field {
+  height: 30px;
+  width: 30%;
+  padding-left: 10px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  outline: none;
+}
+
+.card__field:first-child {
+  width: 100%;
+}
+
+.form-loading {
+  margin: 0;
+  color: var(--main-color);
+}
+
+.form-error {
+  position: absolute;
+  bottom: -15px;
+  margin: 0;
+  margin-top: 2px;
+  color: var(--warning-color);
+  font-size: 12px;
+}
+
+.card-errors {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  width: 100%;
+  color: var(--warning-color);
+  font-size: 12px;
+}
+
+.purchase__field_error {
+  border-color: var(--warning-color);
+}

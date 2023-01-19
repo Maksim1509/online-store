@@ -1,0 +1,22 @@
+:root {
+  --main-color: #0078d7;
+  --yellow: #fad727;
+  --warning-color: #f80404;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+#root {
+  max-width: 1920px;
+  margin: 0 auto;
+}

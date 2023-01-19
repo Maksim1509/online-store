@@ -1,0 +1,36 @@
+.header_imgs {
+  width: 32px;
+  height: 32px;
+}
+
+.header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  max-width: 1920px;
+  margin: 0 auto;
+  background-color: var(--main-color);
+  color: var(--white);
+  font-size: 20px;
+}
+
+.header__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 190px;
+  text-decoration: none;
+  color: #000000;
+}
+
+.header__link-cart {
+  position: relative;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.header__count {
+  position: absolute;
+  top: -8px;
+  right: 10px;
+}
